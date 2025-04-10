@@ -253,7 +253,7 @@ bool UPayloadProcessor::ParseJson(const FString& JsonString, FSceneGraph& OutSce
 
 					if (Aux.Size() < TMathUtilConstants<float>::Epsilon)
 					{
-						UE_LOG(LogCore, Error, TEXT("Invalid quaternion in actor state, setting to identity."));
+						UE_LOG(LogAerosimConnector, Error, TEXT("Invalid quaternion in actor state, setting to identity."));
 						Aux = FQuat::Identity;
 					}
 
@@ -354,7 +354,7 @@ bool UPayloadProcessor::ParseJson(const FString& JsonString, FSceneGraph& OutSce
 
 						if (Aux.Size() < TMathUtilConstants<float>::Epsilon)
 						{
-							UE_LOG(LogCore, Error, TEXT("Invalid quaternion in effector state, setting to identity."));
+							UE_LOG(LogAerosimConnector, Error, TEXT("Invalid quaternion in effector state, setting to identity."));
 							Aux = FQuat::Identity;
 						}
 
@@ -447,12 +447,12 @@ bool UPayloadProcessor::ParseJson(const FString& JsonString, FSceneGraph& OutSce
 								}
 								else
 								{
-									UE_LOG(LogCore, Error, TEXT("The waypoint element is not an array of 3 elements"));
+									UE_LOG(LogAerosimConnector, Error, TEXT("The waypoint element is not an array of 3 elements"));
 								}
 							}
 							else
 							{
-								UE_LOG(LogCore, Error, TEXT("The waypoint element is not an array"));
+								UE_LOG(LogAerosimConnector, Error, TEXT("The waypoint element is not an array"));
 							}
 						}
 						if (Waypoints.Waypoints.Num() > 0)
@@ -486,12 +486,12 @@ bool UPayloadProcessor::ParseJson(const FString& JsonString, FSceneGraph& OutSce
 								}
 								else
 								{
-									UE_LOG(LogCore, Error, TEXT("The waypoint element is not an array of 3 elements"));
+									UE_LOG(LogAerosimConnector, Error, TEXT("The waypoint element is not an array of 3 elements"));
 								}
 							}
 							else
 							{
-								UE_LOG(LogCore, Error, TEXT("The waypoint element is not an array"));
+								UE_LOG(LogAerosimConnector, Error, TEXT("The waypoint element is not an array"));
 							}
 						}
 						if (Waypoints.Waypoints.Num() > 0)

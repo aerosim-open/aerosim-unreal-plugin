@@ -25,7 +25,7 @@ void AAerosimGameMode::BeginPlay()
 
 	if (!IsValid(AerosimDataTracker))
 	{
-		UE_LOG(LogCore, Error, TEXT("Data Tracker is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Data Tracker is not valid"));
 	}
 
 	if (IsValid(RegistryClass))
@@ -55,7 +55,7 @@ void AAerosimGameMode::BeginPlay()
 
 	if (FParse::Value(FCommandLine::Get(), TEXT("InstanceID="), InstanceID))
 	{
-		UE_LOG(LogCore, Warning, TEXT("InstanceID: %s"), *InstanceID);
+		UE_LOG(LogAerosimConnector, Warning, TEXT("InstanceID: %s"), *InstanceID);
 	}
 	else
 	{
@@ -65,7 +65,7 @@ void AAerosimGameMode::BeginPlay()
 	AerosimWeather = World->SpawnActor<AAerosimWeather>(AAerosimWeather::StaticClass());
 	if (!IsValid(AerosimWeather))
 	{
-		UE_LOG(LogCore, Error, TEXT("Weather is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Weather is not valid"));
 	}
 	else
 	{
@@ -88,7 +88,7 @@ void AAerosimGameMode::BeginPlay()
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to initialize message handler."));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to initialize message handler."));
 	}
 }
 

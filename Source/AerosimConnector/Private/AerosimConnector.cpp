@@ -11,6 +11,8 @@
 
 #define LOCTEXT_NAMESPACE "FAerosimConnectorModule"
 
+DEFINE_LOG_CATEGORY(LogAerosimConnector);
+
 void FAerosimConnectorModule::StartupModule()
 {
 	ModifyCesiumTokenDataAsset();
@@ -33,14 +35,14 @@ void FAerosimConnectorModule::ModifyCesiumTokenDataAsset()
 	FAssetData AssetData = AssetRegistry.GetAssetByObjectPath(AssetPath);
 	if (!AssetData.IsValid())
 	{
-		UE_LOG(LogCore, Warning, TEXT("Failed to find UDataAsset: %s"), *AssetPath.ToString());
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Failed to find UDataAsset: %s"), *AssetPath.ToString());
 		return;
 	}
 
 	UObject* Asset = AssetData.GetAsset();
 	if (!Asset)
 	{
-		UE_LOG(LogCore, Warning, TEXT("Failed to load UDataAsset: %s"), *AssetPath.ToString());
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Failed to load UDataAsset: %s"), *AssetPath.ToString());
 		return;
 	}
 
@@ -48,11 +50,11 @@ void FAerosimConnectorModule::ModifyCesiumTokenDataAsset()
 	FString EnvVarValue = FPlatformMisc::GetEnvironmentVariable(TEXT("AEROSIM_CESIUM_TOKEN"));
 	if (EnvVarValue.IsEmpty())
 	{
-		UE_LOG(LogCore, Warning, TEXT("Environment variable AEROSIM_CESIUM_TOKEN is not set or empty."));
-		UE_LOG(LogCore, Log, TEXT("Reading command line for 'CesiumToken' argument."));
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Environment variable AEROSIM_CESIUM_TOKEN is not set or empty."));
+		UE_LOG(LogAerosimConnector, Log, TEXT("Reading command line for 'CesiumToken' argument."));
 		if (!FParse::Value(FCommandLine::Get(), TEXT("CesiumToken="), EnvVarValue))
 		{
-			UE_LOG(LogCore, Error, TEXT("'CesiumToken' argument not found!"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("'CesiumToken' argument not found!"));
 		}
 	}
 
@@ -64,7 +66,7 @@ void FAerosimConnectorModule::ModifyCesiumTokenDataAsset()
 	}
 	else
 	{
-		UE_LOG(LogCore, Warning, TEXT("Failed to cast to UCesiumIonServer: %s"), *AssetPath.ToString());
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Failed to cast to UCesiumIonServer: %s"), *AssetPath.ToString());
 	}
 }
 

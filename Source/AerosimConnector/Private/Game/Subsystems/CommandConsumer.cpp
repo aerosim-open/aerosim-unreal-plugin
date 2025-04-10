@@ -30,7 +30,7 @@ static void PrintJsonObject(const TSharedPtr<FJsonObject>& JsonObject)
 {
 	if (!JsonObject.IsValid())
 	{
-		UE_LOG(LogCore, Warning, TEXT("Invalid FJsonObject"));
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Invalid FJsonObject"));
 		return;
 	}
 
@@ -38,12 +38,12 @@ static void PrintJsonObject(const TSharedPtr<FJsonObject>& JsonObject)
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&JsonString);
 	if (FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer))
 	{
-		UE_LOG(LogCore, Log, TEXT("PrintJsonObject"));
-		UE_LOG(LogCore, Log, TEXT("%s"), *JsonString);
+		UE_LOG(LogAerosimConnector, Log, TEXT("PrintJsonObject"));
+		UE_LOG(LogAerosimConnector, Log, TEXT("%s"), *JsonString);
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to read FJsonObject"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to read FJsonObject"));
 	}
 }
 
@@ -65,7 +65,7 @@ void UCommandConsumer::UpdateSceneFromSceneGraph(const FString& SceneGraphJson)
 		bFirstTime = false;
 	}
 
-	UE_LOG(LogCore, Verbose, TEXT("UpdateSceneFromSceneGraph: %s"), *SceneGraphJson);
+	UE_LOG(LogAerosimConnector, Verbose, TEXT("UpdateSceneFromSceneGraph: %s"), *SceneGraphJson);
 
 	FSceneGraph CurrentSceneGraph;
 	UPayloadProcessor::ParseJson(SceneGraphJson, CurrentSceneGraph);
@@ -93,7 +93,7 @@ void UCommandConsumer::SpawnActorsIfNeeded(FSceneGraph& SceneGraph)
 			AActor* SpawnedActor = Registry->GetActor(NewActorId);
 			if (!IsValid(SpawnedActor))
 			{
-				UE_LOG(LogCore, Error, TEXT("Failed to spawn actor"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Failed to spawn actor"));
 				continue;
 			}
 
@@ -158,7 +158,7 @@ void UCommandConsumer::SpawnActorsIfNeeded(FSceneGraph& SceneGraph)
 			}
 			else
 			{
-				UE_LOG(LogCore, Error, TEXT("Failed to cast spawned actor to AAerosimActor"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Failed to cast spawned actor to AAerosimActor"));
 			}
 		}
 	}
@@ -194,7 +194,7 @@ void UCommandConsumer::UpdateResourcesFromSceneGraph(const FSceneGraph& SceneGra
 				APawn* SpectatorPawn = AerosimGameMode->GetSpectatorPawn();
 				if (!IsValid(SpectatorPawn))
 				{
-					UE_LOG(LogCore, Warning, TEXT("[UpdateResourcesFromSceneGraph] Invalid SpectatorPawn."));
+					UE_LOG(LogAerosimConnector, Warning, TEXT("[UpdateResourcesFromSceneGraph] Invalid SpectatorPawn."));
 					return;
 				}
 				FString Entity = SceneGraph.Resources.ViewportConfig.ActiveViewport;
@@ -203,7 +203,7 @@ void UCommandConsumer::UpdateResourcesFromSceneGraph(const FSceneGraph& SceneGra
 					AAerosimActor* Actor = Cast<AAerosimActor>(Registry->GetActor(ActorNameIdMap[Entity]));
 					if (!IsValid(Actor))
 					{
-						UE_LOG(LogCore, Warning, TEXT("[UpdateResourcesFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
+						UE_LOG(LogAerosimConnector, Warning, TEXT("[UpdateResourcesFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
 						return;
 					}
 
@@ -289,7 +289,7 @@ void UCommandConsumer::UpdateEffectorsFromSceneGraph(FSceneGraph& SceneGraph)
 			AAerosimActor* Actor = Cast<AAerosimActor>(Registry->GetActor(ActorNameIdMap[Entity]));
 			if (!IsValid(Actor))
 			{
-				UE_LOG(LogCore, Warning, TEXT("[UpdateEffectorsFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
+				UE_LOG(LogAerosimConnector, Warning, TEXT("[UpdateEffectorsFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
 				continue;
 			}
 
@@ -362,7 +362,7 @@ void UCommandConsumer::UpdatePFDsFromSceneGraph(const FSceneGraph& SceneGraph)
 			AAerosimActor* AerosimActor = Cast<AAerosimActor>(Registry->GetActor(ActorNameIdMap[Entity]));
 			if (!IsValid(AerosimActor))
 			{
-				UE_LOG(LogCore, Warning, TEXT("[UpdatePFDsFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
+				UE_LOG(LogAerosimConnector, Warning, TEXT("[UpdatePFDsFromSceneGraph] AerosimActor '%s' not found in registered actors."), *Entity);
 				continue;
 			}
 
@@ -402,12 +402,12 @@ void UCommandConsumer::UpdateTrajectoryVisualizationSettingsFromSceneGraph(const
 			}
 			else
 			{
-				UE_LOG(LogCore, Error, TEXT("Actor not valid for trajectory visualizer settings"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Actor not valid for trajectory visualizer settings"));
 			}
 		}
 		else
 		{
-			UE_LOG(LogCore, Error, TEXT("Actor not found for trajectory visualizer user defined waypoints"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for trajectory visualizer user defined waypoints"));
 		}
 	}
 }
@@ -425,12 +425,12 @@ void UCommandConsumer::UpdateTrajectoryVisualizationUserDefinedWaypointsFromScen
 			}
 			else
 			{
-				UE_LOG(LogCore, Error, TEXT("Actor not valid for trajectory user defined waypoints"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Actor not valid for trajectory user defined waypoints"));
 			}
 		}
 		else
 		{
-			UE_LOG(LogCore, Error, TEXT("Actor not found for trajectory user defined waypoints"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for trajectory user defined waypoints"));
 		}
 	}
 }
@@ -448,12 +448,12 @@ void UCommandConsumer::UpdateTrajectoryVisualizationFutureTrajectoryWaypointsFro
 			}
 			else
 			{
-				UE_LOG(LogCore, Error, TEXT("Actor not valid for trajectory future trajectory waypoints"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Actor not valid for trajectory future trajectory waypoints"));
 			}
 		}
 		else
 		{
-			UE_LOG(LogCore, Error, TEXT("Actor not found for trajectory future trajectory waypoints"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for trajectory future trajectory waypoints"));
 		}
 	}
 }
@@ -462,7 +462,7 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 {
 	if (!IsValid(Registry))
 	{
-		UE_LOG(LogCore, Warning, TEXT("No Registry Found"));
+		UE_LOG(LogAerosimConnector, Warning, TEXT("No Registry Found"));
 		return;
 	}
 
@@ -484,7 +484,7 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 		const double StartTimestamp = LastConsumedTimestamp >= 0.0 ? LastConsumedTimestamp : OldestTimestamp;
 		ConsumeEndTime = StartTimestamp + ElapsedTimeSec;
 
-		// UE_LOG(LogCore, Warning, TEXT("Start ElapsedTimeSec=%f, processing up to %d cmds out of queue size: %d, OldestTimestamp=%f, NewestTimestamp=%f, ConsumeEndTime=%f"),
+		// UE_LOG(LogAerosimConnector, Warning, TEXT("Start ElapsedTimeSec=%f, processing up to %d cmds out of queue size: %d, OldestTimestamp=%f, NewestTimestamp=%f, ConsumeEndTime=%f"),
 		// 	ElapsedTimeSec, NumMaxCmdsToProcess, QueueSize, OldestTimestamp, NewestTimestamp, ConsumeEndTime);
 	}
 
@@ -495,7 +495,7 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 		char* Message = get_consumer_payload_from_queue();
 		if (Message == nullptr)
 		{
-			// UE_LOG(LogCore, VeryVerbose, TEXT("no commands in queue"));
+			// UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("no commands in queue"));
 			break;
 		}
 
@@ -508,14 +508,14 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 
 		if (!FJsonSerializer::Deserialize(Reader, JsonObject) || !JsonObject.IsValid())
 		{
-			UE_LOG(LogCore, Warning, TEXT("Failed to parse JSON"));
+			UE_LOG(LogAerosimConnector, Warning, TEXT("Failed to parse JSON"));
 			return;
 		}
 
 		FString JsonString;
 		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&JsonString);
 		FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
-		// UE_LOG(LogCore, Log, TEXT("Parsed JSON: %s"), *JsonString);
+		// UE_LOG(LogAerosimConnector, Log, TEXT("Parsed JSON: %s"), *JsonString);
 
 		const TArray<TSharedPtr<FJsonValue>>* CommandVec;
 		if (JsonObject->TryGetArrayField(TEXT("commands"), CommandVec))
@@ -615,7 +615,7 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 				}
 				else
 				{
-					UE_LOG(LogCore, Warning, TEXT("Unknown command_type: %s"), *CommandType);
+					UE_LOG(LogAerosimConnector, Warning, TEXT("Unknown command_type: %s"), *CommandType);
 				}
 			}
 		}
@@ -631,11 +631,11 @@ void UCommandConsumer::ProcessCommandsFromQueue(float DeltaSeconds)
 			NewestTimestamp = get_consumer_payload_queue_newest_timestamp();
 			OldestTimestamp = get_consumer_payload_queue_oldest_timestamp();
 			const double QueueDuration = NewestTimestamp - OldestTimestamp;
-			// UE_LOG(LogCore, Warning, TEXT("Processed command, updated OldestTimestamp=%f, NewestTimestamp=%f, QueueDuration=%f"), OldestTimestamp, NewestTimestamp, QueueDuration);
+			// UE_LOG(LogAerosimConnector, Warning, TEXT("Processed command, updated OldestTimestamp=%f, NewestTimestamp=%f, QueueDuration=%f"), OldestTimestamp, NewestTimestamp, QueueDuration);
 
 			if (OldestTimestamp > ConsumeEndTime && QueueDuration < COMMAND_BUFFER_MAX_SEC)
 			{
-				// UE_LOG(LogCore, Warning, TEXT("Stop processing commands to leave buffer in queue"));
+				// UE_LOG(LogAerosimConnector, Warning, TEXT("Stop processing commands to leave buffer in queue"));
 				break;
 			}
 		}
@@ -670,7 +670,7 @@ void UCommandConsumer::SpawnActorCommand(TSharedPtr<FJsonObject> JsonObject)
 	UAerosimDataTracker* DataTracker = GameMode->GetAerosimDataTracker();
 	if (!IsValid(DataTracker))
 	{
-		UE_LOG(LogCore, Error, TEXT("DataTracker is not valid"))
+		UE_LOG(LogAerosimConnector, Error, TEXT("DataTracker is not valid"))
 	}
 	else
 	{
@@ -693,7 +693,7 @@ void UCommandConsumer::SpawnActorCommand(TSharedPtr<FJsonObject> JsonObject)
 	bool bActorRegistered = Registry->RegisterActorById(InstanceId, ActorTypeId, Position, Rotation);
 	if (!bActorRegistered)
 	{
-		UE_LOG(LogCore, Warning, TEXT("Couldn't spawn actor type ID %d because registering actor in instance ID %d was unsuccessful."), ActorTypeId, InstanceId);
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Couldn't spawn actor type ID %d because registering actor in instance ID %d was unsuccessful."), ActorTypeId, InstanceId);
 		return;
 	}
 
@@ -706,8 +706,8 @@ void UCommandConsumer::SpawnActorCommand(TSharedPtr<FJsonObject> JsonObject)
 	AerosimActor->SetWidgetID(InstanceId);
 
 	AerosimActor->SetRootLayer(USDPath);
-	UE_LOG(LogCore, Warning, TEXT("Spawn actor command processed: ActorID: %d, TypeID: %d"), InstanceId, ActorTypeId);
-	UE_LOG(LogCore, Warning, TEXT("Load USD command processed: ActorID: %d USD Path %s"), InstanceId, *USDPath);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Spawn actor command processed: ActorID: %d, TypeID: %d"), InstanceId, ActorTypeId);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Load USD command processed: ActorID: %d USD Path %s"), InstanceId, *USDPath);
 }
 
 void UCommandConsumer::SpawnActorByNameCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -730,7 +730,7 @@ void UCommandConsumer::SpawnActorByNameCommand(TSharedPtr<FJsonObject> JsonObjec
 	UAerosimDataTracker* DataTracker = GameMode->GetAerosimDataTracker();
 	if (!IsValid(DataTracker))
 	{
-		UE_LOG(LogCore, Error, TEXT("DataTracker is not valid"))
+		UE_LOG(LogAerosimConnector, Error, TEXT("DataTracker is not valid"))
 	}
 	else
 	{
@@ -753,7 +753,7 @@ void UCommandConsumer::SpawnActorByNameCommand(TSharedPtr<FJsonObject> JsonObjec
 	bool bActorRegistered = Registry->RegisterActorByName(InstanceId, ActorTypeName, Position, Rotation);
 	if (!bActorRegistered)
 	{
-		UE_LOG(LogCore, Warning, TEXT("Couldn't spawn actor '%s' because registering actor in instance ID %d was unsuccessful."), *ActorTypeName, InstanceId);
+		UE_LOG(LogAerosimConnector, Warning, TEXT("Couldn't spawn actor '%s' because registering actor in instance ID %d was unsuccessful."), *ActorTypeName, InstanceId);
 		return;
 	}
 
@@ -766,7 +766,7 @@ void UCommandConsumer::SpawnActorByNameCommand(TSharedPtr<FJsonObject> JsonObjec
 	AerosimActor->SetWidgetID(InstanceId);
 
 	AerosimActor->SetRootLayer(USDPath);
-	UE_LOG(LogCore, Log, TEXT("Spawn actor by name command processed: ActorID: %d, TypeName: %s"), InstanceId, *ActorTypeName);
+	UE_LOG(LogAerosimConnector, Log, TEXT("Spawn actor by name command processed: ActorID: %d, TypeName: %s"), InstanceId, *ActorTypeName);
 }
 
 void UCommandConsumer::SetActorTransformCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -798,7 +798,7 @@ void UCommandConsumer::SetActorTransformCommand(uint32 InstanceId, FVector Trans
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for transform request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for transform request"));
 	}
 
 	TVariant<FVector, int, float> VariantValue;
@@ -808,7 +808,7 @@ void UCommandConsumer::SetActorTransformCommand(uint32 InstanceId, FVector Trans
 	UAerosimDataTracker* DataTracker = GameMode->GetAerosimDataTracker();
 	if (!IsValid(DataTracker))
 	{
-		UE_LOG(LogCore, Error, TEXT("DataTracker is not valid"))
+		UE_LOG(LogAerosimConnector, Error, TEXT("DataTracker is not valid"))
 	}
 	else
 	{
@@ -852,7 +852,7 @@ void UCommandConsumer::DeleteActorCommand(TSharedPtr<FJsonObject> JsonObject)
 	uint32 InstanceId = ParametersObject->GetIntegerField(TEXT("instance_id"));
 	// Directly passing parameters from JSON to the function
 	Registry->RemoveActor(InstanceId);
-	UE_LOG(LogCore, Log, TEXT("Delete actor command processed: ActorID: %d"), InstanceId);
+	UE_LOG(LogAerosimConnector, Log, TEXT("Delete actor command processed: ActorID: %d"), InstanceId);
 }
 
 void UCommandConsumer::SpawnSensorCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -872,7 +872,7 @@ void UCommandConsumer::SpawnSensorCommand(TSharedPtr<FJsonObject> JsonObject)
 
 	// Spawn the sensor actor
 	Registry->RegisterActorByName(InstanceId, SensorType, Position, Rotation);
-	UE_LOG(LogCore, Log, TEXT("Spawn sensor command processed: InstanceID: %d, SensorName: %s"), InstanceId, *SensorName);
+	UE_LOG(LogAerosimConnector, Log, TEXT("Spawn sensor command processed: InstanceID: %d, SensorName: %s"), InstanceId, *SensorName);
 
 	if (SensorType == "sensors/cameras/rgb_camera")
 	{
@@ -888,11 +888,11 @@ void UCommandConsumer::SpawnSensorCommand(TSharedPtr<FJsonObject> JsonObject)
 	AAerosimGameMode* AerosimGameMode = Cast<AAerosimGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (!IsValid(AerosimGameMode))
 	{
-		UE_LOG(LogCore, Error, TEXT("No AerosimGameMode Found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("No AerosimGameMode Found"));
 		return;
 	}
 
-	UE_LOG(LogCore, Log, TEXT("Spectator attached to sensor: ActorID: %d"), InstanceId);
+	UE_LOG(LogAerosimConnector, Log, TEXT("Spectator attached to sensor: ActorID: %d"), InstanceId);
 }
 
 void UCommandConsumer::TransformSensorCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -913,11 +913,11 @@ void UCommandConsumer::TransformSensorCommand(TSharedPtr<FJsonObject> JsonObject
 	{
 		Actor->SetActorLocation(Position);
 		Actor->SetActorRotation(Rotation);
-		// UE_LOG(LogCore, Warning, TEXT("Transform actor command processed: ActorID: %d"), InstanceId);
+		// UE_LOG(LogAerosimConnector, Warning, TEXT("Transform actor command processed: ActorID: %d"), InstanceId);
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for transform request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for transform request"));
 	}
 }
 
@@ -928,7 +928,7 @@ void UCommandConsumer::DeleteSensorCommand(TSharedPtr<FJsonObject> JsonObject)
 	FString SensorName = ParametersObject->GetStringField(TEXT("sensor_name"));
 	// Directly passing parameters from JSON to the function
 	Registry->RemoveActor(InstanceId);
-	UE_LOG(LogCore, Log, TEXT("Delete sensor command processed: ActorID: %d"), InstanceId);
+	UE_LOG(LogAerosimConnector, Log, TEXT("Delete sensor command processed: ActorID: %d"), InstanceId);
 }
 
 void UCommandConsumer::AttachSensorCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -953,10 +953,10 @@ void UCommandConsumer::AttachSensorCommand(TSharedPtr<FJsonObject> JsonObject)
 		AAerosimGameMode* AerosimGameMode = Cast<AAerosimGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (!IsValid(AerosimGameMode))
 		{
-			UE_LOG(LogCore, Error, TEXT("No AerosimGameMode Found"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("No AerosimGameMode Found"));
 			return;
 		}
-		UE_LOG(LogCore, Log, TEXT("Select socket command processed: SensorName: %s, SocketName: %s"), *SensorName, *SocketName);
+		UE_LOG(LogAerosimConnector, Log, TEXT("Select socket command processed: SensorName: %s, SocketName: %s"), *SensorName, *SocketName);
 	}
 }
 
@@ -975,7 +975,7 @@ void UCommandConsumer::LoadCoordinatesCommand(TSharedPtr<FJsonObject> JsonObject
 
 	// Directly passing parameters from JSON to the function
 	CesiumTileManager->LoadTileSet(Lat, Lon, Alt);
-	UE_LOG(LogCore, Warning, TEXT("Load coordinates command processed: Lat: %f, Lon: %f, Alt: %f"), Lat, Lon, Alt);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Load coordinates command processed: Lat: %f, Lon: %f, Alt: %f"), Lat, Lon, Alt);
 }
 
 void UCommandConsumer::AttachSpectatorToSocketCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -1002,11 +1002,11 @@ void UCommandConsumer::AttachSpectatorToSocketCommand(TSharedPtr<FJsonObject> Js
 		AAerosimGameMode* AerosimGameMode = Cast<AAerosimGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (!IsValid(AerosimGameMode))
 		{
-			UE_LOG(LogCore, Error, TEXT("No AerosimGameMode Found"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("No AerosimGameMode Found"));
 			return;
 		}
 
-		UE_LOG(LogCore, Log, TEXT("Select socket command processed: ActorID: %d, SocketName: %s"), InstanceId, *SocketName);
+		UE_LOG(LogAerosimConnector, Log, TEXT("Select socket command processed: ActorID: %d, SocketName: %s"), InstanceId, *SocketName);
 	}
 }
 
@@ -1024,7 +1024,7 @@ void UCommandConsumer::LoadUSDInActorCommand(TSharedPtr<FJsonObject> JsonObject)
 
 	AerosimActor->SetRootLayer(USDPath);
 
-	UE_LOG(LogCore, Warning, TEXT("Load USD command processed: ActorID: %d USD Path %s"), InstanceId, *USDPath);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Load USD command processed: ActorID: %d USD Path %s"), InstanceId, *USDPath);
 }
 
 void UCommandConsumer::AttachActorToActorWithSocketCommand(TSharedPtr<FJsonObject> JsonObject)
@@ -1053,13 +1053,13 @@ void UCommandConsumer::AttachActorToActorWithSocketCommand(TSharedPtr<FJsonObjec
 				return;
 
 			RootComponent->AttachToComponent(StaticMeshComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale, *SocketName);
-			UE_LOG(LogCore, Log, TEXT("Attach actor to actor with socket command processed: ParentActorID: %d, ChildActorID: %d, SocketName: %s"), ParentActorId, ChildActorId, *SocketName);
+			UE_LOG(LogAerosimConnector, Log, TEXT("Attach actor to actor with socket command processed: ParentActorID: %d, ChildActorID: %d, SocketName: %s"), ParentActorId, ChildActorId, *SocketName);
 		}
 	}
 	else
 	{
 		bool Result = ChildActor->AttachToActor(ParentActor, FAttachmentTransformRules::SnapToTargetNotIncludingScale, *SocketName);
-		UE_LOG(LogCore, Log, TEXT("Attach actor to actor with socket command processed %s: ParentActorID: %d, ChildActorID: %d, SocketName: %s"), Result ? "Successful" : "Failed", ParentActorId, ChildActorId, *SocketName);
+		UE_LOG(LogAerosimConnector, Log, TEXT("Attach actor to actor with socket command processed %s: ParentActorID: %d, ChildActorID: %d, SocketName: %s"), Result ? "Successful" : "Failed", ParentActorId, ChildActorId, *SocketName);
 	}
 }
 
@@ -1072,11 +1072,11 @@ void UCommandConsumer::MeasureAltitudeOffsetCommand(TSharedPtr<FJsonObject> Json
 	double Lon = ParametersObject->GetNumberField(TEXT("lon"));
 	double ExpectedAltitude = ParametersObject->GetNumberField(TEXT("expected_hae_in_meters"));
 
-	UE_LOG(LogCore, Log, TEXT("Measure Altitude Offset Command Received"));
+	UE_LOG(LogAerosimConnector, Log, TEXT("Measure Altitude Offset Command Received"));
 
 	if (!CesiumTileManager)
 	{
-		UE_LOG(LogCore, Error, TEXT("TileManager is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("TileManager is not valid"));
 		return;
 	}
 
@@ -1087,21 +1087,21 @@ void UCommandConsumer::MeasureAltitudeOffsetCommand(TSharedPtr<FJsonObject> Json
 	AAerosimGameMode* AerosimGameMode = Cast<AAerosimGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (!IsValid(AerosimGameMode))
 	{
-		UE_LOG(LogCore, Error, TEXT("No AerosimGameMode Found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("No AerosimGameMode Found"));
 		return;
 	}
 
 	APawn* SpectatorPawn = AerosimGameMode->GetSpectatorPawn();
 	if (!IsValid(SpectatorPawn))
 	{
-		UE_LOG(LogCore, Error, TEXT("No SpectatorPawn Found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("No SpectatorPawn Found"));
 		return;
 	}
 
 	USceneComponent* RootComponent = SpectatorPawn->GetRootComponent();
 	if (!IsValid(RootComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("No RootComponent Found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("No RootComponent Found"));
 		return;
 	}
 
@@ -1121,16 +1121,16 @@ void UCommandConsumer::MeasureAltitudeOffsetCommand(TSharedPtr<FJsonObject> Json
 	if (CesiumTileManager->GetCesiumTileset())
 	{
 		CesiumTileManager->GetCesiumTileset()->OnTilesetLoaded.AddDynamic(this, &UCommandConsumer::OnTilesetLoaded);
-		UE_LOG(LogCore, Log, TEXT("OnTilesetLoaded delegate bound"));
+		UE_LOG(LogAerosimConnector, Log, TEXT("OnTilesetLoaded delegate bound"));
 	}
 }
 
 void UCommandConsumer::OnTilesetLoaded()
 {
-	UE_LOG(LogCore, Log, TEXT("Tileset loaded"));
+	UE_LOG(LogAerosimConnector, Log, TEXT("Tileset loaded"));
 	if (!CesiumTileManager)
 	{
-		UE_LOG(LogCore, Error, TEXT("CesiumTileManager is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("CesiumTileManager is not valid"));
 		return;
 	}
 
@@ -1138,16 +1138,16 @@ void UCommandConsumer::OnTilesetLoaded()
 	if (CesiumTileManager->GetCesiumTileset())
 	{
 		CesiumTileManager->GetCesiumTileset()->OnTilesetLoaded.RemoveDynamic(this, &UCommandConsumer::OnTilesetLoaded);
-		UE_LOG(LogCore, Log, TEXT("OnTilesetLoaded delegate unbound"));
+		UE_LOG(LogAerosimConnector, Log, TEXT("OnTilesetLoaded delegate unbound"));
 	}
 
 	if (!GetWorld())
 	{
-		UE_LOG(LogCore, Error, TEXT("World context is invalid. Timer cannot be set."));
+		UE_LOG(LogAerosimConnector, Error, TEXT("World context is invalid. Timer cannot be set."));
 		return;
 	}
 
-	UE_LOG(LogCore, Log, TEXT("Tileset loaded. Waiting for 5 seconds before adjusting offset"));
+	UE_LOG(LogAerosimConnector, Log, TEXT("Tileset loaded. Waiting for 5 seconds before adjusting offset"));
 	// Delay for 5 seconds before measuring altitude to give the tileset time to load properly
 	GetWorld()->GetTimerManager().SetTimer(DepthSensorDelayTimerHandle, this, &UCommandConsumer::AdjustDepthSensorOffset, 5.0f, false);
 }
@@ -1159,7 +1159,7 @@ void UCommandConsumer::AdjustDepthSensorOffset()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(DepthSensorDelayTimerHandle);
 		DepthSensorDelayTimerHandle.Invalidate(); // Reset the handle to ensure it's reusable
-		UE_LOG(LogCore, Log, TEXT("Timer handle cleared and invalidated"));
+		UE_LOG(LogAerosimConnector, Log, TEXT("Timer handle cleared and invalidated"));
 	}
 
 	// Query the values from the DepthCaptureActor
@@ -1184,7 +1184,7 @@ void UCommandConsumer::AdjustDepthSensorOffset()
 		CesiumTileManager->SetOriginHeight(CachedMeasureAltitudeOffsetCommandParams.ExpectedAltitude);
 	}
 
-	UE_LOG(LogCore, Log, TEXT("Tileset loaded. Waiting for 5 seconds before taking final offset"));
+	UE_LOG(LogAerosimConnector, Log, TEXT("Tileset loaded. Waiting for 5 seconds before taking final offset"));
 	// Delay for 5 seconds before measuring altitude to give the tileset time to switch to the LOD level we need.
 	GetWorld()->GetTimerManager().SetTimer(DepthSensorDelayTimerHandle, this, &UCommandConsumer::MeasureAltitudeOffsetResponse, 5.0f, false);
 }
@@ -1248,7 +1248,7 @@ void UCommandConsumer::VisualizeTrajectoryCommand(TSharedPtr<FJsonObject> JsonOb
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for visualize trajectory request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for visualize trajectory request"));
 	}
 }
 
@@ -1268,7 +1268,7 @@ void UCommandConsumer::VisualizeTrajectorySettingsCommand(TSharedPtr<FJsonObject
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for visualize trajectory request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for visualize trajectory request"));
 	}
 }
 
@@ -1295,14 +1295,14 @@ void UCommandConsumer::VisualizeTrajectoryAddAheadTrajectory(TSharedPtr<FJsonObj
 			}
 			else
 			{
-				UE_LOG(LogCore, Warning, TEXT("The positions must have exactly 3 elements."));
+				UE_LOG(LogAerosimConnector, Warning, TEXT("The positions must have exactly 3 elements."));
 			}
 		}
 		AerosimActor->UpdateTrajectoryVisualizerFutureTrajectory(ParsedTrajectory);
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for visualize trajectory request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for visualize trajectory request"));
 	}
 }
 
@@ -1329,14 +1329,14 @@ void UCommandConsumer::SetUserDefinedWaypointsCommand(TSharedPtr<FJsonObject> Js
 			}
 			else
 			{
-				UE_LOG(LogCore, Warning, TEXT("Waypoint array does not have exactly 3 elements."));
+				UE_LOG(LogAerosimConnector, Warning, TEXT("Waypoint array does not have exactly 3 elements."));
 			}
 		}
 		AerosimActor->UpdateTrajectoryVisualizerUserDefinedWaypoints(MoveTemp(ParsedWaypoints));
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor not found for visualize trajectory request"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor not found for visualize trajectory request"));
 	}
 }
 

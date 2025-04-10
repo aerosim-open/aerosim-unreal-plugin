@@ -72,7 +72,7 @@ void UAerosimDataTracker::UpdateDataTracker(EDataTrackerType DataTrackerType, in
 		}
 		default:
 		{
-			UE_LOG(LogCore, Error, TEXT("You are trying to update an invalid data tracker type"))
+			UE_LOG(LogAerosimConnector, Error, TEXT("You are trying to update an invalid data tracker type"))
 			break;
 		}
 	}
