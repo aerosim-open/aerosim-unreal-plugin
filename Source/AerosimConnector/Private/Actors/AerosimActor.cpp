@@ -1,4 +1,5 @@
 #include "Actors/AerosimActor.h"
+#include "AerosimConnector.h"
 #include "Components/TrajectoryVisualizerComponent.h"
 #include "Components/WidgetComponent.h"
 #include "HUD/PFDWidget.h"
@@ -24,7 +25,7 @@ AAerosimActor::AAerosimActor()
 	TrajectoryVisualizerComponent->SetupAttachment(SceneRootComponent);
 	if (!IsValid(TrajectoryVisualizerComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("TrajectoryVisualizerComponent failed to create"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("TrajectoryVisualizerComponent failed to create"));
 	}
 }
 
@@ -46,7 +47,7 @@ USceneComponent* AAerosimActor::GetChildrenActorByChildName(const FString& Child
 	if (IsValid(Result))
 		return Result;
 
-	UE_LOG(LogCore, Error, TEXT("Requested USD part is not valid"));
+	UE_LOG(LogAerosimConnector, Error, TEXT("Requested USD part is not valid"));
 	return nullptr;
 }
 
@@ -110,7 +111,7 @@ void AAerosimActor::UpdateTrajectoryVisualizer(FVector Position)
 {
 	if (!IsValid(TrajectoryVisualizerComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
 		return;
 	}
 	TrajectoryVisualizerComponent->Update(Position);
@@ -120,7 +121,7 @@ void AAerosimActor::UpdateTrajectoryVisualizerUserDefinedWaypoints(const TArray<
 {
 	if (!IsValid(TrajectoryVisualizerComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
 		return;
 	}
 	TrajectoryVisualizerComponent->UpdateUserDefinedWaypoints(Waypoints);
@@ -130,7 +131,7 @@ void AAerosimActor::UpdateTrajectoryVisualizerFutureTrajectory(const TArray<FVec
 {
 	if (!IsValid(TrajectoryVisualizerComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("UpdateTrajectoryVisualizerAddAheadTrajectory is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("UpdateTrajectoryVisualizerAddAheadTrajectory is not valid"));
 		return;
 	}
 	TrajectoryVisualizerComponent->UpdateFutureTrajectory(Waypoints);
@@ -140,7 +141,7 @@ void AAerosimActor::UpdateTrajectoryVisualizerSettings(bool bDisplayFutureTrajec
 {
 	if (!IsValid(TrajectoryVisualizerComponent))
 	{
-		UE_LOG(LogCore, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("TrajectoryVisualizerComponent is not valid"));
 		return;
 	}
 	TrajectoryVisualizerComponent->UpdateSettings(bDisplayFutureTrajectory, bDisplayPastWaypoints, bHighlightUserDefinedWaypoints, NumberOfFutureWaypoints);
@@ -151,19 +152,19 @@ void AAerosimActor::SetWidgetID(int Id)
 	UWidgetComponent* WidgetComponent = FindComponentByClass<UWidgetComponent>();
 	if (!IsValid(WidgetComponent))
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("No widget component found in actor %s"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("No widget component found in actor %s"), *GetName());
 	}
 	else
 	{
 		UUserWidget* UserWidget = WidgetComponent->GetWidget();
 		if (!IsValid(UserWidget))
 		{
-			UE_LOG(LogCore, Error, TEXT("No widget object retrieved"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("No widget object retrieved"));
 		}
 		Widget = Cast<UPFDWidget>(UserWidget);
 		if (!IsValid(Widget))
 		{
-			UE_LOG(LogCore, Error, TEXT("airspeed widget not valid"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("airspeed widget not valid"));
 		}
 		else
 		{

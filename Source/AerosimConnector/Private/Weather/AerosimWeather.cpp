@@ -145,7 +145,7 @@ void AAerosimWeather::LoadWeatherPresetDataByName(const FString& WeatherPreset)
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Weather preset not found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Weather preset not found"));
 	}
 }
 

@@ -16,21 +16,21 @@ void UTrajectoryVisualizerComponent::BeginPlay()
 	SplineBaseMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/aerosim-assets/Materials/Instances/BaseColors/MI_Pink"));
 	if (!IsValid(SplineBaseMaterial))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to load SplineBaseMaterial"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to load SplineBaseMaterial"));
 		return;
 	}
 
 	WaypointBaseMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/aerosim-assets/Materials/Instances/BaseColors/MI_Green"));
 	if (!IsValid(WaypointBaseMaterial))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to load WaypointBaseMaterial"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to load WaypointBaseMaterial"));
 		return;
 	}
 
 	SplineMaterial = UMaterialInstanceDynamic::Create(SplineBaseMaterial, this);
 	if (!IsValid(SplineMaterial))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to create SplineMaterial"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to create SplineMaterial"));
 		return;
 	}
 	SplineMaterial->SetVectorParameterValue("BaseColor", FLinearColor(1.0f, 0.0f, 1.0f, 1.0f));
@@ -38,7 +38,7 @@ void UTrajectoryVisualizerComponent::BeginPlay()
 	WaypointMaterial = UMaterialInstanceDynamic::Create(WaypointBaseMaterial, this);
 	if (!IsValid(WaypointMaterial))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to create WaypointMaterial"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to create WaypointMaterial"));
 		return;
 	}
 	WaypointMaterial->SetVectorParameterValue("BaseColor", FLinearColor(0.0f, 1.0f, 0.0f, 1.0f));
@@ -48,7 +48,7 @@ void UTrajectoryVisualizerComponent::Update(FVector Position)
 {
 	if (!bEnabled)
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
 		return;
 	}
 	if (!SplineComponent)
@@ -68,7 +68,7 @@ void UTrajectoryVisualizerComponent::UpdateUserDefinedWaypoints(const TArray<FVe
 {
 	if (!bEnabled)
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
 		return;
 	}
 	if (UserDefinedWaypoints.Num() > 0)
@@ -91,7 +91,7 @@ void UTrajectoryVisualizerComponent::UpdateFutureTrajectory(const TArray<FVector
 {
 	if (!bEnabled)
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
 		return;
 	}
 
@@ -136,21 +136,21 @@ void UTrajectoryVisualizerComponent::DrawSpline()
 {
 	if (!bEnabled)
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
 		return;
 	}
 	const int32 NumPoints = SplineComponent->GetNumberOfSplinePoints();
 
 	if (NumPoints < 2 || LastSplinePointIndex >= NumPoints - 1)
 	{
-		UE_LOG(LogCore, Error, TEXT("Not enough points to draw Spline"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Not enough points to draw Spline"));
 		return;
 	}
 
 	USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(this);
 	if (!IsValid(SplineMesh))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to create SplineMesh"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to create SplineMesh"));
 		return;
 	}
 	SplineMesh->SetMobility(EComponentMobility::Movable);
@@ -166,7 +166,7 @@ void UTrajectoryVisualizerComponent::DrawSpline()
 		CubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
 		if (!IsValid(CubeMesh))
 		{
-			UE_LOG(LogCore, Error, TEXT("Failed to load Cube Mesh"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Failed to load Cube Mesh"));
 			return;
 		}
 	}
@@ -192,7 +192,7 @@ void UTrajectoryVisualizerComponent::DrawFutureSpline()
 {
 	if (!bEnabled)
 	{
-		UE_LOG(LogCore, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
+		UE_LOG(LogAerosimConnector, VeryVerbose, TEXT("Actor: %s -> Has not enabled the Trajectory Visualizer Component"), *GetName());
 		return;
 	}
 
@@ -201,7 +201,7 @@ void UTrajectoryVisualizerComponent::DrawFutureSpline()
 		CubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
 		if (!IsValid(CubeMesh))
 		{
-			UE_LOG(LogCore, Error, TEXT("Failed to load Cube Mesh"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Failed to load Cube Mesh"));
 			return;
 		}
 	}
@@ -212,7 +212,7 @@ void UTrajectoryVisualizerComponent::DrawFutureSpline()
 		USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(this);
 		if (!IsValid(SplineMesh))
 		{
-			UE_LOG(LogCore, Error, TEXT("Failed to create SplineMesh at index %d"), PointIndex);
+			UE_LOG(LogAerosimConnector, Error, TEXT("Failed to create SplineMesh at index %d"), PointIndex);
 			continue;
 		}
 
@@ -248,7 +248,7 @@ void UTrajectoryVisualizerComponent::DrawUserDefinedWaypoints(const TArray<FVect
 
 		if (!IsValid(SphereComponent))
 		{
-			UE_LOG(LogCore, Error, TEXT("Failed to create SphereComponent"));
+			UE_LOG(LogAerosimConnector, Error, TEXT("Failed to create SphereComponent"));
 			return;
 		}
 		SphereComponent->SetWorldLocation(Waypoint);
@@ -259,7 +259,7 @@ void UTrajectoryVisualizerComponent::DrawUserDefinedWaypoints(const TArray<FVect
 			SphereMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Sphere.Sphere"));
 			if (!IsValid(SphereMesh))
 			{
-				UE_LOG(LogCore, Error, TEXT("Failed to load Sphere Mesh"));
+				UE_LOG(LogAerosimConnector, Error, TEXT("Failed to load Sphere Mesh"));
 				return;
 			}
 		}

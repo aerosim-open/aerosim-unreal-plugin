@@ -27,12 +27,12 @@ bool UActorRegistry::RegisterActorById(int InstanceId, int ActorTypeId, FVector 
 	{
 		if (!bDestroyExisting)
 		{
-			UE_LOG(LogCore, Warning, TEXT("Instance at ID %d already in registry, could not register."), InstanceId);
+			UE_LOG(LogAerosimConnector, Warning, TEXT("Instance at ID %d already in registry, could not register."), InstanceId);
 			return false;
 		}
 		else
 		{
-			UE_LOG(LogCore, Warning, TEXT("Instance at ID %d already in registry, destroying the existing actor to spawn new one."), InstanceId);
+			UE_LOG(LogAerosimConnector, Warning, TEXT("Instance at ID %d already in registry, destroying the existing actor to spawn new one."), InstanceId);
 			RemoveActor(InstanceId);
 		}
 	}
@@ -40,12 +40,12 @@ bool UActorRegistry::RegisterActorById(int InstanceId, int ActorTypeId, FVector 
 	AActor* NewActor = SpawnActorById((uint32)ActorTypeId, Position, Rotation);
 	if (!IsValid(NewActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("New actor reference not found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("New actor reference not found"));
 		return false;
 	}
 
 	ActiveActors.Emplace((uint32)InstanceId, NewActor);
-	UE_LOG(LogCore, Verbose, TEXT("Actor added to registry"));
+	UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor added to registry"));
 	return true;
 }
 
@@ -55,12 +55,12 @@ bool UActorRegistry::RegisterActorByName(int InstanceId, const FString& ActorTyp
 	{
 		if (!bDestroyExisting)
 		{
-			UE_LOG(LogCore, Warning, TEXT("Instance at ID %d already in registry, could not register."), InstanceId);
+			UE_LOG(LogAerosimConnector, Warning, TEXT("Instance at ID %d already in registry, could not register."), InstanceId);
 			return false;
 		}
 		else
 		{
-			UE_LOG(LogCore, Warning, TEXT("Instance at ID %d already in registry, destroying the existing actor to spawn new one."), InstanceId);
+			UE_LOG(LogAerosimConnector, Warning, TEXT("Instance at ID %d already in registry, destroying the existing actor to spawn new one."), InstanceId);
 			RemoveActor(InstanceId);
 		}
 	}
@@ -68,12 +68,12 @@ bool UActorRegistry::RegisterActorByName(int InstanceId, const FString& ActorTyp
 	AActor* NewActor = SpawnActorByName(ActorTypeName, Position, Rotation);
 	if (!IsValid(NewActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("New actor reference not found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("New actor reference not found"));
 		return false;
 	}
 
 	ActiveActors.Emplace((uint32)InstanceId, NewActor);
-	UE_LOG(LogCore, Verbose, TEXT("Actor added to registry"));
+	UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor added to registry"));
 	return true;
 }
 
@@ -123,12 +123,12 @@ bool UActorRegistry::RemoveActor(int InstanceId)
 	AActor* Actor = GetActor((uint32)InstanceId);
 	if (!IsValid(Actor))
 	{
-		UE_LOG(LogCore, Warning, TEXT("actor not found in registry"));
+		UE_LOG(LogAerosimConnector, Warning, TEXT("actor not found in registry"));
 		return false;
 	}
 	Actor->Destroy();
 	ActiveActors.Remove((uint32)InstanceId);
-	UE_LOG(LogCore, Verbose, TEXT("Actor successfully removed"));
+	UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor successfully removed"));
 	return true;
 }
 
@@ -136,25 +136,25 @@ AActor* UActorRegistry::SpawnActorById(uint32 ActorTypeId, FVector Location, FRo
 {
 	if (!IsValid(WorldReference))
 	{
-		UE_LOG(LogCore, Error, TEXT("World reference not set"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("World reference not set"));
 		return nullptr;
 	}
 
 	UClass* ActorClass = FindActorClassById(ActorTypeId).LoadSynchronous();
 	if (!IsValid(ActorClass))
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor type not found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor type not found"));
 		return nullptr;
 	}
 
 	AActor* SpawnedActor = WorldReference->SpawnActor<AActor>(ActorClass, Location, Rotation);
 	if (!IsValid(SpawnedActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor failed to spawn"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor failed to spawn"));
 	}
 	else
 	{
-		UE_LOG(LogCore, Verbose, TEXT("Actor successfully spawned"));
+		UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor successfully spawned"));
 	}
 
 	return SpawnedActor;
@@ -164,25 +164,25 @@ AActor* UActorRegistry::SpawnActorByName(FString ActorTypeName, FVector Location
 {
 	if (!IsValid(WorldReference))
 	{
-		UE_LOG(LogCore, Error, TEXT("World reference not set"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("World reference not set"));
 		return nullptr;
 	}
 
 	UClass* ActorClass = FindActorClassByName(ActorTypeName).LoadSynchronous();
 	if (!IsValid(ActorClass))
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor type not found"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor type not found"));
 		return nullptr;
 	}
 
 	AActor* SpawnedActor = WorldReference->SpawnActor<AActor>(ActorClass, Location, Rotation);
 	if (!IsValid(SpawnedActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("Actor failed to spawn"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Actor failed to spawn"));
 	}
 	else
 	{
-		UE_LOG(LogCore, Verbose, TEXT("Actor successfully spawned"));
+		UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor successfully spawned"));
 	}
 
 	return SpawnedActor;
@@ -194,7 +194,7 @@ TSoftClassPtr<AActor> UActorRegistry::FindActorClassById(uint32 ActorTypeId)
 	{
 		if (ActorInfo.ActorTypeId == ActorTypeId)
 		{
-			UE_LOG(LogCore, Verbose, TEXT("Actor type successfully retrieved"));
+			UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor type successfully retrieved"));
 			return ActorInfo.ActorClass;
 		}
 	}
@@ -207,7 +207,7 @@ TSoftClassPtr<AActor> UActorRegistry::FindActorClassByName(FString ActorTypeName
 	{
 		if (ActorInfo.ActorTypeName == ActorTypeName)
 		{
-			UE_LOG(LogCore, Verbose, TEXT("Actor type successfully retrieved"));
+			UE_LOG(LogAerosimConnector, Verbose, TEXT("Actor type successfully retrieved"));
 			return ActorInfo.ActorClass;
 		}
 	}

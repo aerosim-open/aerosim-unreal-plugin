@@ -17,17 +17,17 @@ void UCesiumTileManager::BeginPlay()
 	GeoReference = ACesiumGeoreference::GetDefaultGeoreference(CurrentWorldReference);
 	if (!IsValid(GeoReference))
 	{
-		UE_LOG(LogCore, Error, TEXT("Georeference is not detected"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Georeference is not detected"));
 	}
 	CesiumTileset = SpawnCesiumTileset();
 	if (!IsValid(CesiumTileset))
 	{
-		UE_LOG(LogCore, Error, TEXT("CesiumTileset is not detected"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("CesiumTileset is not detected"));
 	}
 	CesiumSunSky = SpawnCesiumSunSky();
 	if (!IsValid(CesiumSunSky))
 	{
-		UE_LOG(LogCore, Error, TEXT("CesiumSunSky is not detected"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("CesiumSunSky is not detected"));
 	}
 
 	CesiumTileset->AttachToActor(GeoReference, FAttachmentTransformRules::KeepWorldTransform);
@@ -51,11 +51,11 @@ void UCesiumTileManager::EndPlay()
 }
 bool UCesiumTileManager::LoadTileSet(double Lat, double Lon, double Height)
 {
-	UE_LOG(LogCore, Warning, TEXT("Tile set to be loaded at %f %f"), Lat, Lon);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Tile set to be loaded at %f %f"), Lat, Lon);
 
 	if (!IsValid(GeoReference))
 	{
-		UE_LOG(LogCore, Error, TEXT("GeoReference Is not Valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("GeoReference Is not Valid"));
 	}
 
 	// Set Cesium World Origin Coordinates
@@ -69,10 +69,10 @@ bool UCesiumTileManager::LoadTileSet(double Lat, double Lon, double Height)
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("Spectator Pawn is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Spectator Pawn is not valid"));
 	}
 
-	UE_LOG(LogCore, Warning, TEXT("Tile set loaded at %f %f"), Lat, Lon);
+	UE_LOG(LogAerosimConnector, Warning, TEXT("Tile set loaded at %f %f"), Lat, Lon);
 
 	return true;
 }
@@ -86,7 +86,7 @@ bool UCesiumTileManager::SpawnAltitudeOffsetSensor()
 
 	if (!IsValid(DepthCaptureActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("Failed to spawn DepthCaptureActor"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("Failed to spawn DepthCaptureActor"));
 		return false;
 	}
 
@@ -104,7 +104,7 @@ double UCesiumTileManager::MeasureAltitudeOffset()
 {
 	if (!IsValid(DepthCaptureActor))
 	{
-		UE_LOG(LogCore, Error, TEXT("DepthCaptureActor not in Scene"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("DepthCaptureActor not in Scene"));
 		return 0.0;
 	}
 
@@ -240,7 +240,7 @@ void UCesiumTileManager::SetCesiumEnabled(bool bEnable)
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("CesiumTileset is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("CesiumTileset is not valid"));
 	}
 
 	if(IsValid(GeoReference))
@@ -251,7 +251,7 @@ void UCesiumTileManager::SetCesiumEnabled(bool bEnable)
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("GeoReference is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("GeoReference is not valid"));
 	}
 
 	if(IsValid(CesiumCameraManager))
@@ -262,7 +262,7 @@ void UCesiumTileManager::SetCesiumEnabled(bool bEnable)
 	}
 	else
 	{
-		UE_LOG(LogCore, Error, TEXT("CesiumCameraManager is not valid"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("CesiumCameraManager is not valid"));
 	}
 }
 

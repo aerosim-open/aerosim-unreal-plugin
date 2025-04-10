@@ -12,14 +12,14 @@ void UPFDWidget::GetData(float& Airspeed, float& TrueAirspeed, float& Altitude, 
 	AAerosimGameMode* GameMode = Cast<AAerosimGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (!IsValid(GameMode))
 	{
-		UE_LOG(LogCore, Error, TEXT("GameMode Not Found: %s"));
+		UE_LOG(LogAerosimConnector, Error, TEXT("GameMode Not Found: %s"));
 		return;
 	}
 
 	UAerosimDataTracker* DataTracker = GameMode->GetAerosimDataTracker();
 	if (!IsValid(DataTracker))
 	{
-		UE_LOG(LogCore, Error, TEXT("DataTracker is not valid"))
+		UE_LOG(LogAerosimConnector, Error, TEXT("DataTracker is not valid"))
 	}
 	else
 	{

@@ -74,7 +74,7 @@ namespace ImageUtil
 				ConvertRawR16G16B16A16DataToFLinearColor(Extent.X, Extent.Y, (uint8*)PixelData, SourcePitch, Out.GetData());
 				break;
 			default:
-				UE_LOG(LogCore, Warning, TEXT("Unsupported format %llu"), (unsigned long long)Format);
+				UE_LOG(LogAerosimConnector, Warning, TEXT("Unsupported format %llu"), (unsigned long long)Format);
 				return false;
 		}
 		return true;
@@ -152,7 +152,7 @@ namespace ImageUtil
 				ConvertRawR8DataToFColor(Extent.X, Extent.Y, (uint8*)PixelData, SourcePitch, Out.GetData());
 				break;
 			default:
-				UE_LOG(LogCore, Warning, TEXT("Unsupported format %llu"), (unsigned long long)Format);
+				UE_LOG(LogAerosimConnector, Warning, TEXT("Unsupported format %llu"), (unsigned long long)Format);
 				return false;
 		}
 		return true;
